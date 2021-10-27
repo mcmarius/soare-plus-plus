@@ -7,23 +7,12 @@ test
 
 #include <string>
 #include <vector>
-//#include <date/date.h>
+#include <date/date.h>
 #include <ostream>
 #include <iostream>
 #include <unordered_map>
 
-class data {
-    int an;
-    int luna;
-    int zi;
-public:
-    data(int an, int luna, int zi) : an(an), luna(luna), zi(zi) {}
-
-    friend std::ostream &operator<<(std::ostream &os, const data &data) {
-        os << "an: " << data.an << " luna: " << data.luna << " zi: " << data.zi;
-        return os;
-    }
-};
+using namespace date::literals;
 
 enum class cod { ROSU, PORTOCALIU, GALBEN, VERDE };
 
@@ -47,14 +36,17 @@ std::ostream& operator<<(std::ostream& os, const enum cod& cod) {
 
 class fenomen_meteorologic {
     std::string nume;
-    data inceput;
-    data sfarsit;
-//    date::year_month_day inceput;
-//    date::year_month_day sfarsit;
+//    data inceput;
+//    data sfarsit;
+    date::year_month_day inceput;
+    date::year_month_day sfarsit;
     cod cod;
 public:
-    fenomen_meteorologic(const std::string &nume, const data &inceput, const data &sfarsit, enum cod cod)
+    fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod)
     : nume(nume), inceput(inceput), sfarsit(sfarsit), cod(cod) {}
+
+    fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit)
+    : fenomen_meteorologic(nume, inceput, sfarsit, cod::VERDE) {} //nume(nume), inceput(inceput), sfarsit(sfarsit) {}
 
     fenomen_meteorologic(const fenomen_meteorologic& copie)
     : nume(copie.nume), inceput(copie.inceput), sfarsit(copie.sfarsit), cod(copie.cod) {
@@ -116,12 +108,13 @@ class simulator {
 };
 
 int main() {
-    fenomen_meteorologic ploaie("ploaie", {2021, 10, 10}, {2021, 10, 11}, cod::GALBEN);
-    fenomen_meteorologic ceata("ceata", {2021, 10, 12}, {2021, 10, 14}, cod::PORTOCALIU);
-    fenomen_meteorologic soare("soare", {2021, 10, 15}, {2021, 10, 19}, cod::VERDE);
-    fenomen_meteorologic iar_soare("soare", {2020, 10, 15}, {2020, 10, 19}, cod::VERDE);
+    fenomen_meteorologic ploaie("ploaie", 2021_y/10/10, 2021_y/10/11, cod::GALBEN);
+    fenomen_meteorologic ceata("ceata", 2021_y/10/12, 2021_y/10/14, cod::PORTOCALIU);
+    fenomen_meteorologic soare("soare", 2021_y/10/15, 2021_y/10/19, cod::VERDE);
+    fenomen_meteorologic iar_soare("soare", 2020_y/10/15, 2020_y/10/19, cod::VERDE);
 
     std::cout << ploaie << ceata << soare;
     statistica stat {{ploaie, ceata, soare, iar_soare}};
     std::cout << stat;
+    auto x = 2021_y/10/10;
 }
