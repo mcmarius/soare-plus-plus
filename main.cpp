@@ -5,116 +5,52 @@ test
 // Created by marius on 2021-10-20.
 //
 
-#include <string>
 #include <vector>
 #include <date/date.h>
-#include <ostream>
 #include <iostream>
-#include <unordered_map>
+#include <random>
+#include <set>
+#include "fenomen_meteorologic.h"
+#include "statistica.h"
 
 using namespace date::literals;
 
-enum class cod { ROSU, PORTOCALIU, GALBEN, VERDE };
-
-std::ostream& operator<<(std::ostream& os, const enum cod& cod) {
-    switch(cod) {
-        case cod::ROSU:
-            os << "rosu";
-            break;
-        case cod::PORTOCALIU:
-            os << "portocaliu";
-            break;
-        case cod::GALBEN:
-            os << "galben";
-            break;
-        case cod::VERDE:
-            os << "verde";
-            break;
-    }
-    return os;
-}
-
-class fenomen_meteorologic {
-    std::string nume;
-//    data inceput;
-//    data sfarsit;
-    date::year_month_day inceput;
-    date::year_month_day sfarsit;
-    cod cod;
-public:
-    fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod)
-    : nume(nume), inceput(inceput), sfarsit(sfarsit), cod(cod) {}
-
-    fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit)
-    : fenomen_meteorologic(nume, inceput, sfarsit, cod::VERDE) {} //nume(nume), inceput(inceput), sfarsit(sfarsit) {}
-
-    fenomen_meteorologic(const fenomen_meteorologic& copie)
-    : nume(copie.nume), inceput(copie.inceput), sfarsit(copie.sfarsit), cod(copie.cod) {
-        std::cout << "cc fenomen\n";
-    }
-
-    fenomen_meteorologic& operator=(const fenomen_meteorologic& copie) {
-        std::cout << "op= fenomen\n";
-        if(this != &copie) {
-            this->nume = copie.nume;
-            this->inceput = copie.inceput;
-            this->sfarsit = copie.sfarsit;
-            this->cod = copie.cod;
-        }
-        return *this;
-    }
-
-    ~fenomen_meteorologic() {
-        std::cout << "destr fenomen\n";
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const fenomen_meteorologic &meteorologic) {
-        os << "nume: " << meteorologic.nume << " inceput: " << meteorologic.inceput << " sfarsit: "
-           << meteorologic.sfarsit << " cod: " << meteorologic.cod << "\n";
-        return os;
-    }
-
-    enum cod getCod() const {
-        return cod;
-    }
-};
-
-class statistica {
-    std::vector<fenomen_meteorologic> date;
-public:
-    statistica(const std::vector <fenomen_meteorologic> &date) : date(date) {}
-
-    auto calculeaza_frecventa() const {
-        std::unordered_map<cod, int> frecventa;
-        for(const auto& data_ : date)
-            if(frecventa.contains(data_.getCod()))
-                frecventa[data_.getCod()]++;
-            else
-                frecventa[data_.getCod()] = 1;
-        return frecventa;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const statistica &statistica) {
-        const auto& frecventa = statistica.calculeaza_frecventa();
-        for(const auto& [cod, nr] : frecventa) {
-            std::cout << cod << ": " << nr << "\n";
-        }
-        return os;
-    }
-};
-
 class simulator {
-    std::vector<fenomen_meteorologic> fenomene;
+    std::set <fenomen_meteorologic> fenomene;
+    std::vector <fenomen_meteorologic> fenomene_v;
+    static const int MAX_ITERATII = 10;
+public:
+    simulator(const std::set <fenomen_meteorologic> &fenomene)
+    : fenomene(fenomene), fenomene_v(fenomene.begin(), fenomene.end()) {}
+
+    void adauga(const fenomen_meteorologic &fenomen) {
+        fenomene.insert(fenomen);
+        if(fenomene.size() != fenomene_v.size())
+            fenomene_v.push_back(fenomen);
+    }
+
+    void simuleaza(int nr_iteratii = MAX_ITERATII) {
+        std::random_device r;
+        std::default_random_engine engine(r());
+        std::cout << "------------------------\n";
+        std::uniform_int_distribution <unsigned> uniform_dist(0, fenomene.size() - 1);
+        for(int i = 0; i < nr_iteratii; ++i) {
+            unsigned nr = uniform_dist(engine);
+            std::cout << fenomene_v[nr].getCod() << "\n";
+        }
+        std::cout << "------------------------\n";
+    }
 };
 
 int main() {
-    fenomen_meteorologic ploaie("ploaie", 2021_y/10/10, 2021_y/10/11, cod::GALBEN);
-    fenomen_meteorologic ceata("ceata", 2021_y/10/12, 2021_y/10/14, cod::PORTOCALIU);
-    fenomen_meteorologic soare("soare", 2021_y/10/15, 2021_y/10/19, cod::VERDE);
-    fenomen_meteorologic iar_soare("soare", 2020_y/10/15, 2020_y/10/19, cod::VERDE);
+    fenomen_meteorologic ploaie("ploaie", 2021_y / 10 / 10, 2021_y / 10 / 11, cod::GALBEN, 750, 16);
+    fenomen_meteorologic ceata("ceata", 2021_y / 10 / 12, 2021_y / 10 / 14, cod::PORTOCALIU, 740, 14);
+    fenomen_meteorologic soare("soare", 2021_y / 10 / 15, 2021_y / 10 / 19, cod::VERDE, 765, 25);
+    fenomen_meteorologic iar_soare("soare", 2020_y / 10 / 15, 2020_y / 10 / 19, cod::VERDE);
 
     std::cout << ploaie << ceata << soare;
-    statistica stat {{ploaie, ceata, soare, iar_soare}};
+    statistica stat{{ploaie, ceata, soare, iar_soare, ceata, ceata}};
     std::cout << stat;
-    auto x = 2021_y/10/10;
+    simulator sim{{ploaie, soare, ceata, iar_soare}};
+    sim.simuleaza();
 }
