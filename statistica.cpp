@@ -49,6 +49,14 @@ double statistica::presiune_atmosferica_medie() const {
     return medie / date.size();
 }
 
+double statistica::temperatura_aparenta_medie() const {
+    double medie = 0;
+    for(const auto &data: date) {
+        medie += data.temperaturaAparenta();
+    }
+    return medie / date.size();
+}
+
 //auto statistica::durata_medie() const {
 //    std::for_each(date.begin(), date.end(), [](const fenomen_meteorologic& data){
 //      data.getSfarsit().

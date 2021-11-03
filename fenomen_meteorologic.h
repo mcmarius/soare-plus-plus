@@ -16,20 +16,23 @@ enum class cod { ROSU, PORTOCALIU, GALBEN, VERDE };
 std::ostream &operator<<(std::ostream &os, const enum cod &cod);
 
 class fenomen_meteorologic {
+protected:
     std::string nume;
 //    data inceput;
 //    data sfarsit;
     date::year_month_day inceput;
     date::year_month_day sfarsit;
-    cod cod;
+    cod cod_;
     int presiune_atmosferica{760};
     int temperatura{20};
+    int id;
+    static int id_max;
 public:
     fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod, int presiuneAtmosferica, int temperatura);
     fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod);
     fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit); //nume(nume), inceput(inceput), sfarsit(sfarsit) {}
     fenomen_meteorologic(const fenomen_meteorologic &copie);
-    fenomen_meteorologic(fenomen_meteorologic &&) = delete;
+//    fenomen_meteorologic(fenomen_meteorologic &&) = delete;
 
     fenomen_meteorologic &operator=(const fenomen_meteorologic &copie);
     ~fenomen_meteorologic();
@@ -41,6 +44,7 @@ public:
     const date::year_month_day &getSfarsit() const;
     int getPresiuneAtmosferica() const;
     int getTemperatura() const;
+    int temperaturaAparenta() const;
     bool operator==(const fenomen_meteorologic &rhs) const;
     bool operator!=(const fenomen_meteorologic &rhs) const;
     bool operator<(const fenomen_meteorologic &rhs) const;

@@ -12,6 +12,8 @@ test
 #include <set>
 #include "fenomen_meteorologic.h"
 #include "statistica.h"
+#include "soare.h"
+#include "ploaie.h"
 
 using namespace date::literals;
 
@@ -43,14 +45,14 @@ public:
 };
 
 int main() {
-    fenomen_meteorologic ploaie("ploaie", 2021_y / 10 / 10, 2021_y / 10 / 11, cod::GALBEN, 750, 16);
+    ploaie p1(2021_y / 10 / 10, 2021_y / 10 / 11, cod::GALBEN, 750, 16);
     fenomen_meteorologic ceata("ceata", 2021_y / 10 / 12, 2021_y / 10 / 14, cod::PORTOCALIU, 740, 14);
-    fenomen_meteorologic soare("soare", 2021_y / 10 / 15, 2021_y / 10 / 19, cod::VERDE, 765, 25);
-    fenomen_meteorologic iar_soare("soare", 2020_y / 10 / 15, 2020_y / 10 / 19, cod::VERDE);
+    soare s1(2021_y / 10 / 15, 2021_y / 10 / 19, cod::VERDE, 765, 25);
+    soare s2(2020_y / 10 / 15, 2020_y / 10 / 19, cod::VERDE, 750, 23);
 
-    std::cout << ploaie << ceata << soare;
-    statistica stat{{ploaie, ceata, soare, iar_soare, ceata, ceata}};
-    std::cout << stat;
-    simulator sim{{ploaie, soare, ceata, iar_soare}};
+    std::cout << p1 << ceata << s1.temperaturaAparenta();
+    statistica stat{{p1, ceata, s1, s2, ceata, ceata}};
+    std::cout << stat << " " << stat.temperatura_aparenta_medie();
+    simulator sim{{p1, s1, ceata, s2}};
     sim.simuleaza();
 }

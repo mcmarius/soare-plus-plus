@@ -19,6 +19,7 @@ public:
     auto frecventa_cod() const;
 //    auto durata_medie() const;
     double temperatura_medie() const;
+    double temperatura_aparenta_medie() const;
     double presiune_atmosferica_medie() const;
     void adauga(const fenomen_meteorologic &data);
 
