@@ -14,3 +14,7 @@ int ploaie::temperaturaAparenta() const {
 
 ploaie::ploaie(const date::year_month_day &inceput, const date::year_month_day &sfarsit, cod cod_, int presiuneAtmosferica, int temperatura)
 : fenomen_meteorologic("ploaie", inceput, sfarsit, cod_, presiuneAtmosferica, temperatura) {}
+
+ploaie *ploaie::clone() const {
+    return new ploaie(*this);
+}

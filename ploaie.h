@@ -15,6 +15,7 @@ public:
     ploaie(const date::year_month_day &inceput, const date::year_month_day &sfarsit, cod cod_, int presiuneAtmosferica, int temperatura);
 
     int temperaturaAparenta() const;
+    ploaie *clone() const override;
 };
 
 #endif //SOARE_PLUS_PLUS_PLOAIE_H

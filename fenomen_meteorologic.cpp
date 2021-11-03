@@ -138,3 +138,7 @@ int fenomen_meteorologic::temperaturaAparenta() const {
     std::cout << "fenonmen temp aparenta\n";
     return temperatura;
 }
+
+fenomen_meteorologic *fenomen_meteorologic::clone() const {
+    return new fenomen_meteorologic(*this);
+}

@@ -7,15 +7,15 @@ test
 
 #include "statistica.h"
 
-statistica::statistica(const std::vector <fenomen_meteorologic> &date) : date(date) {}
+statistica::statistica(const std::vector <fenomen_meteorologic *> &date) : date(date) {}
 
 auto statistica::frecventa_cod() const {
     std::unordered_map <cod, int> frecventa;
-    for(const auto &data_: date)
-        if(frecventa.contains(data_.getCod()))
-            frecventa[data_.getCod()]++;
+    for(const auto &data: date)
+        if(frecventa.contains(data->getCod()))
+            frecventa[data->getCod()]++;
         else
-            frecventa[data_.getCod()] = 1;
+            frecventa[data->getCod()] = 1;
     return frecventa;
 }
 
@@ -29,14 +29,14 @@ std::ostream &operator<<(std::ostream &os, const statistica &statistica) {
     return os;
 }
 
-void statistica::adauga(const fenomen_meteorologic &data) {
+void statistica::adauga(fenomen_meteorologic *data) {
     date.push_back(data);
 }
 
 double statistica::temperatura_medie() const {
     double medie = 0;
     for(const auto &data: date) {
-        medie += data.getTemperatura();
+        medie += data->getTemperatura();
     }
     return medie / date.size();
 }
@@ -44,7 +44,7 @@ double statistica::temperatura_medie() const {
 double statistica::presiune_atmosferica_medie() const {
     double medie = 0;
     for(const auto &data: date) {
-        medie += data.getPresiuneAtmosferica();
+        medie += data->getPresiuneAtmosferica();
     }
     return medie / date.size();
 }
@@ -52,9 +52,31 @@ double statistica::presiune_atmosferica_medie() const {
 double statistica::temperatura_aparenta_medie() const {
     double medie = 0;
     for(const auto &data: date) {
-        medie += data.temperaturaAparenta();
+        medie += data->temperaturaAparenta();
     }
     return medie / date.size();
+}
+
+statistica::~statistica() {
+    for(auto &data: date)
+        delete data;
+}
+
+statistica::statistica(const statistica &copie) {
+    for(const auto &data: copie.date)
+        date.push_back(data->clone());
+}
+
+statistica &statistica::operator=(const statistica &copie) {
+    if(this != &copie) {
+        auto date_noi = std::vector <fenomen_meteorologic *>();
+        for(const auto &data: copie.date)
+            date_noi.push_back(data->clone());
+        for(auto &data: date)
+            delete data;
+        date = date_noi;
+    }
+    return *this;
 }
 
 //auto statistica::durata_medie() const {
