@@ -142,3 +142,7 @@ int fenomen_meteorologic::temperaturaAparenta() const {
 std::shared_ptr <fenomen_meteorologic> fenomen_meteorologic::clone() const {
     return std::make_shared <fenomen_meteorologic>(*this);
 }
+
+int fenomen_meteorologic::getIdMax() {
+    return id_max;
+}

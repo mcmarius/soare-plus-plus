@@ -45,7 +45,9 @@ public:
 };
 
 int main() {
+    std::cout << fenomen_meteorologic::getIdMax() << "\n";
     ploaie p1(2021_y / 10 / 10, 2021_y / 10 / 11, cod::GALBEN, 750, 16);
+    std::cout << fenomen_meteorologic::getIdMax() << "\n";
     fenomen_meteorologic ceata("ceata", 2021_y / 10 / 12, 2021_y / 10 / 14, cod::PORTOCALIU, 740, 14);
     soare s1(2021_y / 10 / 15, 2021_y / 10 / 19, cod::VERDE, 765, 25);
     soare s2(2020_y / 10 / 15, 2020_y / 10 / 19, cod::VERDE, 750, 23);
@@ -64,4 +66,5 @@ int main() {
     std::cout << "\n---------\n";
     simulator sim{{p1, s1, ceata, s2}};
     sim.simuleaza();
+    return 0;
 }
