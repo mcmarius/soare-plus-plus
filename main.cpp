@@ -44,7 +44,89 @@ public:
     }
 };
 
+class baza {
+    int x = 0;
+protected:
+    int y = 1;
+public:
+    void f() {
+        std::cout << "baza f\n";
+    }
+
+    ~baza() {
+        std::cout << "destr baza\n";
+    }
+};
+
+class derivata : public baza {
+public:
+    void f() {
+        std::cout << y << " derivata f\n";
+    }
+
+    ~derivata() {
+        std::cout << "destr derivata\n";
+    }
+};
+
+class baza_v {
+    int x = 0;
+protected:
+    int y = 1;
+public:
+    virtual void f() {
+        std::cout << "baza_v f\n";
+    }
+
+    virtual ~baza_v() {
+        std::cout << "destr baza_v\n";
+    }
+};
+
+class derivata_v : public baza_v {
+public:
+    void f() {
+        std::cout << y << " derivata_v f\n";
+    }
+
+    ~derivata_v() {
+        std::cout << "destr derivata_v\n";
+    }
+};
+
+class nimic {};
+class nimic_v {
+    virtual ~nimic_v() = default;
+};
+
 int main() {
+    //derivata d;
+    //d.f();
+    //d.g();
+//    d.y;
+    std::cout << sizeof(baza) << " " << sizeof(derivata) << "\n";
+    std::cout << sizeof(baza_v) << " " << sizeof(derivata_v) << "\n";
+    std::cout << sizeof(void *) << "\n";
+    std::cout << sizeof(nimic) << " " << sizeof(nimic_v)
+              << "\n";  // 1 pt ca fiecare obiect nou trebuie sa aiba o adresa unica
+
+    baza *b1 = new derivata;
+    baza_v *b2 = new derivata_v;
+    std::shared_ptr <baza> b3 = std::make_shared <derivata>();
+    std::shared_ptr <baza_v> b4 = std::make_shared <derivata_v>();
+    b1->f();
+    std::cout << "-----1-----\n";
+    b2->f();
+    std::cout << "-----2-----\n";
+    b3->f();
+    std::cout << "-----3-----\n";
+    b4->f();
+    std::cout << "-----4-----\n";
+    delete b1;
+    delete b2;
+
+    return 0;
+
     ploaie p1(2021_y / 10 / 10, 2021_y / 10 / 11, cod::GALBEN, 750, 16);
     fenomen_meteorologic ceata("ceata", 2021_y / 10 / 12, 2021_y / 10 / 14, cod::PORTOCALIU, 740, 14);
     soare s1(2021_y / 10 / 15, 2021_y / 10 / 19, cod::VERDE, 765, 25);
