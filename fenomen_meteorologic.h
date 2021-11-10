@@ -45,7 +45,7 @@ public:
     int getPresiuneAtmosferica() const;
     int getTemperatura() const;
     virtual int temperaturaAparenta() const;
-    virtual fenomen_meteorologic *clone() const;
+    virtual std::shared_ptr <fenomen_meteorologic> clone() const;
     bool operator==(const fenomen_meteorologic &rhs) const;
     bool operator!=(const fenomen_meteorologic &rhs) const;
     bool operator<(const fenomen_meteorologic &rhs) const;

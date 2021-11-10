@@ -15,7 +15,7 @@ public:
     soare(const date::year_month_day &inceput, const date::year_month_day &sfarsit, cod cod, int presiuneAtmosferica, int temperatura);
     int temperaturaAparenta() const;
     ~soare();
-    soare *clone() const override;
+    std::shared_ptr <fenomen_meteorologic> clone() const override;
 };
 
 #endif //SOARE_PLUS_PLUS_SOARE_H

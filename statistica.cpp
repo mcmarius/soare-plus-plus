@@ -7,7 +7,7 @@ test
 
 #include "statistica.h"
 
-statistica::statistica(const std::vector <fenomen_meteorologic *> &date) : date(date) {}
+statistica::statistica(const std::vector <std::shared_ptr <fenomen_meteorologic>> &date) : date(date) {}
 
 auto statistica::frecventa_cod() const {
     std::unordered_map <cod, int> frecventa;
@@ -29,7 +29,7 @@ std::ostream &operator<<(std::ostream &os, const statistica &statistica) {
     return os;
 }
 
-void statistica::adauga(fenomen_meteorologic *data) {
+void statistica::adauga(const std::shared_ptr <fenomen_meteorologic> &data) {
     date.push_back(data);
 }
 
@@ -58,8 +58,6 @@ double statistica::temperatura_aparenta_medie() const {
 }
 
 statistica::~statistica() {
-    for(auto &data: date)
-        delete data;
 }
 
 statistica::statistica(const statistica &copie) {
@@ -69,11 +67,9 @@ statistica::statistica(const statistica &copie) {
 
 statistica &statistica::operator=(const statistica &copie) {
     if(this != &copie) {
-        auto date_noi = std::vector <fenomen_meteorologic *>();
+        auto date_noi = std::vector <std::shared_ptr <fenomen_meteorologic>>();
         for(const auto &data: copie.date)
             date_noi.push_back(data->clone());
-        for(auto &data: date)
-            delete data;
         date = date_noi;
     }
     return *this;

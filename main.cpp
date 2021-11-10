@@ -51,15 +51,17 @@ int main() {
     soare s2(2020_y / 10 / 15, 2020_y / 10 / 19, cod::VERDE, 750, 23);
 
     std::cout << p1 << ceata << s1.temperaturaAparenta();
-    statistica stat{{new fenomen_meteorologic(ceata)}}; //{p1, ceata, s1, s2, ceata, ceata}};
-    stat.adauga(new ploaie(p1));
-    stat.adauga(new soare(s1));
-    stat.adauga(new fenomen_meteorologic(ceata));
-    stat.adauga(new soare(s2));
+    statistica stat{{std::make_shared <fenomen_meteorologic>(ceata)}}; //{p1, ceata, s1, s2, ceata, ceata}};
+    stat.adauga(std::make_shared <ploaie>(p1));
+    stat.adauga(std::make_shared <soare>(s1));
+    stat.adauga(std::make_shared <fenomen_meteorologic>(ceata));
+    stat.adauga(std::make_shared <soare>(s2));
     {
         statistica stat2(stat);
     }
+    std::cout << "---------\n";
     std::cout << stat << " " << stat.temperatura_aparenta_medie();
+    std::cout << "\n---------\n";
     simulator sim{{p1, s1, ceata, s2}};
     sim.simuleaza();
 }

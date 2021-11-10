@@ -19,6 +19,6 @@ soare::~soare() {
     std::cout << "destr soare\n";
 }
 
-soare *soare::clone() const {
-    return new soare(*this);
+std::shared_ptr <fenomen_meteorologic> soare::clone() const {
+    return std::make_shared <soare>(*this);
 }

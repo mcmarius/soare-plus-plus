@@ -139,6 +139,6 @@ int fenomen_meteorologic::temperaturaAparenta() const {
     return temperatura;
 }
 
-fenomen_meteorologic *fenomen_meteorologic::clone() const {
-    return new fenomen_meteorologic(*this);
+std::shared_ptr <fenomen_meteorologic> fenomen_meteorologic::clone() const {
+    return std::make_shared <fenomen_meteorologic>(*this);
 }
