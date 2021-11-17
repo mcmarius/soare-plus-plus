@@ -35,7 +35,7 @@ public:
 //    fenomen_meteorologic(fenomen_meteorologic &&) = delete;
 
     fenomen_meteorologic &operator=(const fenomen_meteorologic &copie);
-    virtual ~fenomen_meteorologic();
+    virtual ~fenomen_meteorologic() = 0;
 
     friend std::ostream &operator<<(std::ostream &os, const fenomen_meteorologic &meteorologic);
 
@@ -45,7 +45,7 @@ public:
     int getPresiuneAtmosferica() const;
     int getTemperatura() const;
     virtual int temperaturaAparenta() const;
-    virtual std::shared_ptr <fenomen_meteorologic> clone() const;
+    virtual std::shared_ptr <fenomen_meteorologic> clone() const = 0;
     bool operator==(const fenomen_meteorologic &rhs) const;
     bool operator!=(const fenomen_meteorologic &rhs) const;
     bool operator<(const fenomen_meteorologic &rhs) const;

@@ -13,6 +13,7 @@ test
 class soare : public fenomen_meteorologic {
 public:
     soare(const date::year_month_day &inceput, const date::year_month_day &sfarsit, cod cod, int presiuneAtmosferica, int temperatura);
+    soare(const date::year_month_day &inceput, const date::year_month_day &sfarsit);
     int temperaturaAparenta() const;
     ~soare();
     std::shared_ptr <fenomen_meteorologic> clone() const override;

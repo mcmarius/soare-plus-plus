@@ -6,6 +6,7 @@ test
 //
 
 #include "fenomen_meteorologic.h"
+#include "exceptii.h"
 
 int fenomen_meteorologic::id_max = 1;
 
@@ -30,13 +31,21 @@ std::ostream &operator<<(std::ostream &os, const cod &cod) {
     return os;
 }
 
-fenomen_meteorologic::fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod)
-: nume(nume), inceput(inceput), sfarsit(sfarsit), cod_(cod), id(id_max) {
-    id_max++;
-}
-
 fenomen_meteorologic::fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit)
 : fenomen_meteorologic(nume, inceput, sfarsit, cod::VERDE) {}
+
+fenomen_meteorologic::fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod)
+: fenomen_meteorologic(nume, inceput, sfarsit, cod, 760, 20) {
+}
+
+fenomen_meteorologic::fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod, int presiuneAtmosferica, int temperatura)
+: nume(nume), inceput(inceput), sfarsit(sfarsit), cod_(cod), presiune_atmosferica(presiuneAtmosferica), temperatura(temperatura), id(id_max) {
+    if(inceput > sfarsit)
+        throw eroare_interval();
+    if(temperatura < -273 || temperatura > 300)
+        throw eroare_senzor(temperatura);
+    id_max++;
+}
 
 fenomen_meteorologic::fenomen_meteorologic(const fenomen_meteorologic &copie)
 : nume(copie.nume), inceput(copie.inceput), sfarsit(copie.sfarsit), cod_(copie.cod_), temperatura(copie.temperatura), presiune_atmosferica(copie.presiune_atmosferica),
@@ -78,11 +87,6 @@ const date::year_month_day &fenomen_meteorologic::getInceput() const {
 
 const date::year_month_day &fenomen_meteorologic::getSfarsit() const {
     return sfarsit;
-}
-
-fenomen_meteorologic::fenomen_meteorologic(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit, enum cod cod, int presiuneAtmosferica, int temperatura)
-: nume(nume), inceput(inceput), sfarsit(sfarsit), cod_(cod), presiune_atmosferica(presiuneAtmosferica), temperatura(temperatura), id(id_max) {
-    id_max++;
 }
 
 int fenomen_meteorologic::getPresiuneAtmosferica() const {
@@ -137,10 +141,6 @@ bool fenomen_meteorologic::operator<(const fenomen_meteorologic &rhs) const {
 int fenomen_meteorologic::temperaturaAparenta() const {
     std::cout << "fenonmen temp aparenta\n";
     return temperatura;
-}
-
-std::shared_ptr <fenomen_meteorologic> fenomen_meteorologic::clone() const {
-    return std::make_shared <fenomen_meteorologic>(*this);
 }
 
 int fenomen_meteorologic::getIdMax() {
