@@ -6,6 +6,7 @@ test
 //
 
 #include "statistica.h"
+#include <unordered_map>
 
 statistica::statistica(const std::vector <std::shared_ptr <fenomen_meteorologic>> &date) : date(date) {}
 
