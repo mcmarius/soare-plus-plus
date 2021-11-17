@@ -13,7 +13,7 @@ statistica::statistica(const std::vector <std::shared_ptr <fenomen_meteorologic>
 auto statistica::frecventa_cod() const {
     std::unordered_map <cod, int> frecventa;
     for(const auto &data: date)
-        if(frecventa.contains(data->getCod()))
+        if(frecventa.find(data->getCod()) != frecventa.end())
             frecventa[data->getCod()]++;
         else
             frecventa[data->getCod()] = 1;
