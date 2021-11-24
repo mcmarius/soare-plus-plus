@@ -16,6 +16,7 @@ test
 #include "ploaie.h"
 #include "exceptii.h"
 #include "ceata.h"
+#include "furtuna.h"
 
 using namespace date::literals;
 
@@ -38,8 +39,8 @@ public:
     }
 
     void simuleaza(int nr_iteratii = MAX_ITERATII) {
-        std::random_device r;
-        std::default_random_engine engine(r());
+        static std::random_device r;
+        static std::default_random_engine engine(r());
         std::cout << "------------------------\n";
         std::uniform_int_distribution <unsigned> uniform_dist(0, fenomene.size() - 1);
         for(int i = 0; i < nr_iteratii; ++i) {
@@ -79,6 +80,29 @@ void f1() {
 
 int main() {
 
+    //fenomen_meteorologic
+    // ce face new:
+    // aloca memorie (suficienti bytes pt acel obiect) si apoi
+    // apeleaza constructorul
+    fenomen_meteorologic *s0 = new soare{2021_y / 4 / 4, 2021_y / 5 / 5};
+    furtuna fr{"abc", 2021_y / 3 / 3, 2021_y / 4 / 5};
+
+    int *x = new int;
+    int *vec = new int[20];
+    delete x;
+    delete[] vec;
+    // de ce avem si new/delete, si new[]/delete[]?
+    // pt ca pot fi suprascrisi separat pt a optimiza modul in care se fac alocarile
+
+
+    // ce face delete:
+    // apeleaza destructorul si apoi
+    // elibereaza memoria alocata cu new
+    delete s0;
+
+    // constr: baza, der1, der2
+    // destr: der2, der1, baza
+
     try {
         std::cout << "inainte de f1\n";
         soare soare0_main(2020_y / 11 / 17, 2020_y / 11 / 17);
@@ -87,9 +111,11 @@ int main() {
     }
     catch(eroare_fenomen &eroare) {
         std::cout << eroare.what() << "\n";
+        //throw std::runtime_error("");
     }
     catch(std::exception &eroare) {
         std::cout << eroare.what() << "\n";
+        //throw;
     }
 
     std::cout << fenomen_meteorologic::getIdMax() << "\n";
@@ -99,12 +125,19 @@ int main() {
     auto s1 = std::make_shared <soare>(2021_y / 10 / 15, 2021_y / 10 / 19, cod::VERDE, 765, 25);
     auto s2 = std::make_shared <soare>(2020_y / 10 / 15, 2020_y / 10 / 19, cod::VERDE, 750, 23);
 
+    s1 = s2;
+
+    std::cout << s1->getTemperatura() << " " << s2->getTemperatura();
+    s1->adauga_vant();
+    std::cout << s1->getTemperatura() << " " << s2->getTemperatura();
+
     std::cout << *p1 << *ceata_ << s1->temperaturaAparenta();
     statistica stat{{ceata_}}; //{p1, ceata, s1, s2, ceata, ceata}};
     stat.adauga(p1);
     stat.adauga(s1);
     stat.adauga(ceata_);
     stat.adauga(s2);
+    stat.adauga(std::make_shared <furtuna>(fr));
     {
         statistica stat2(stat);
     }

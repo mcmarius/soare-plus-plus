@@ -50,6 +50,10 @@ public:
     bool operator!=(const fenomen_meteorologic &rhs) const;
     bool operator<(const fenomen_meteorologic &rhs) const;
     static int getIdMax();
+
+    void adauga_vant() {
+        temperatura -= 2;
+    }
 };
 
 #endif //SOARE_PLUS_PLUS_FENOMEN_METEOROLOGIC_H
