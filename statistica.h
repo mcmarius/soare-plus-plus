@@ -27,6 +27,10 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const statistica &statistica);
     ~statistica();
+
+    std::shared_ptr <fenomen_meteorologic> &operator[](int i) {
+        return date[i];
+    }
 };
 
 #endif //SOARE_PLUS_PLUS_STATISTICA_H

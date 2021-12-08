@@ -5,11 +5,8 @@ test
 // Created by marius on 2021-10-20.
 //
 
-#include <vector>
 #include <date/date.h>
 #include <iostream>
-#include <random>
-#include <set>
 #include "fenomen_meteorologic.h"
 #include "statistica.h"
 #include "soare.h"
@@ -17,39 +14,9 @@ test
 #include "exceptii.h"
 #include "ceata.h"
 #include "furtuna.h"
+#include "simulator.h"
 
 using namespace date::literals;
-
-class simulator {
-    std::set <std::shared_ptr <fenomen_meteorologic>> fenomene;
-    std::vector <std::shared_ptr <fenomen_meteorologic>> fenomene_v;
-    static const int MAX_ITERATII = 10;
-public:
-    simulator(const std::set <std::shared_ptr <fenomen_meteorologic>> &fenomene) {
-        for(const auto &fenomen: fenomene)
-            this->fenomene.insert(fenomen->clone());
-        for(const auto &fenomen: fenomene)
-            this->fenomene_v.push_back(fenomen->clone());
-    }
-
-    void adauga(const std::shared_ptr <fenomen_meteorologic> &fenomen) {
-        fenomene.insert(fenomen->clone());
-        if(fenomene.size() != fenomene_v.size())
-            fenomene_v.push_back(fenomen->clone());
-    }
-
-    void simuleaza(int nr_iteratii = MAX_ITERATII) {
-        static std::random_device r;
-        static std::default_random_engine engine(r());
-        std::cout << "------------------------\n";
-        std::uniform_int_distribution <unsigned> uniform_dist(0, fenomene.size() - 1);
-        for(int i = 0; i < nr_iteratii; ++i) {
-            unsigned nr = uniform_dist(engine);
-            std::cout << fenomene_v[nr]->getCod() << "\n";
-        }
-        std::cout << "------------------------\n";
-    }
-};
 
 void f1();
 void f2();
@@ -78,8 +45,59 @@ void f1() {
     }
 }
 
-int main() {
+class baza {
+protected:
+    int x;
+public:
+    virtual void f() {
+        std::cout << "baza\n";
+    }
+};
 
+class der1 : virtual public baza {
+public:
+    void f() override {
+        baza::f();
+        std::cout << "d1\n";
+    }
+};
+class der2 : virtual public baza {
+public:
+    void f() override {
+        baza::f();
+        std::cout << "d2\n";
+    }
+};
+class der_multipla : public der1, public der2 {
+public:
+    void f() override {
+        der1::f();
+        der2::f();
+        x;
+        //der3::x;
+    }
+};
+
+class abc {
+    int a;
+    float b;
+    double c;
+public:
+    abc(int a = 2, float b = 1, double c = 0) : a(a), b(b), c(c) {}
+};
+
+template <typename T, typename U>
+void f(T x, U y) {
+    std::cout << x << " " << y << "\n";
+}
+
+int main() {
+    f <int, int>(2, 3);
+    f <int, double>(2, 3);
+    f <float, double>(2, 3);
+//    abc a = builder.set_c(2).build();
+    der_multipla d;
+    d.f();
     //fenomen_meteorologic
     // ce face new:
     // aloca memorie (suficienti bytes pt acel obiect) si apoi
@@ -144,7 +162,8 @@ int main() {
     std::cout << "---------\n";
     std::cout << stat << " " << stat.temperatura_aparenta_medie();
     std::cout << "\n---------\n";
-    simulator sim{std::set <std::shared_ptr <fenomen_meteorologic>>{p1, s1, ceata_, s2}};
+    simulator <unsigned> sim{std::set <std::shared_ptr <fenomen_meteorologic>>{p1, s1, ceata_, s2}};
+    simulator <unsigned short> sim2{std::set <std::shared_ptr <fenomen_meteorologic>>{p1, s1, ceata_, s2}};
     sim.simuleaza();
     return 0;
 }

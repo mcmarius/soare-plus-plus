@@ -13,7 +13,7 @@ endif ()
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(${PROJECT_NAME}
-        main.cpp fenomen_meteorologic.cpp fenomen_meteorologic.h statistica.cpp statistica.h ploaie.cpp ploaie.h soare.cpp soare.h exceptii.cpp exceptii.h ceata.cpp ceata.h furtuna.cpp furtuna.h)
+        main.cpp fenomen_meteorologic.cpp fenomen_meteorologic.h statistica.cpp statistica.h ploaie.cpp ploaie.h soare.cpp soare.h exceptii.cpp exceptii.h ceata.cpp ceata.h furtuna.cpp furtuna.h simulator.cpp simulator.h simulator_impl.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
