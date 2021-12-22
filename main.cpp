@@ -118,18 +118,25 @@ void f(T x, U y) {
 template <typename T>
 class app {
     T date;
-    app() = default;
-    static app *app_;
+    app();
+
 public:
-    static app &instance() {
-        if(app_ == nullptr)
-            app_ = new app();
-        return *app_;
-    }
+    static app &instance();
 };
 
 template <typename T>
-app <T> *app <T>::app_ = nullptr;
+app <T> &app <T>::instance() {
+    static app app_;
+    return app_;
+}
+
+template <typename T>
+app <T>::app() {
+    std::cout << "app init\n";
+}
+
+//template <typename T>
+//app <T> *app <T>::app_ = nullptr;
 
 int main() {
     auto &apl = app <der3>::instance();
