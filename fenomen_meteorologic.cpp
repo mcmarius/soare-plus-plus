@@ -73,7 +73,8 @@ fenomen_meteorologic::~fenomen_meteorologic() {
 
 std::ostream &operator<<(std::ostream &os, const fenomen_meteorologic &fenomen) {
     os << "id: " << fenomen.id << ": nume: " << fenomen.nume << " inceput: " << fenomen.inceput << " sfarsit: "
-       << fenomen.sfarsit << " cod_: " << fenomen.cod_ << "\n";
+       << fenomen.sfarsit << " cod_: " << fenomen.cod_ << ", ta: "
+       << fenomen.temperaturaAparenta() << ", pa: " << fenomen.presiune_atmosferica << "\n";
     return os;
 }
 

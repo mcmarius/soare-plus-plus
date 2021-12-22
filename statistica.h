@@ -25,12 +25,19 @@ public:
     statistica(const statistica &copie);
     statistica &operator=(const statistica &copie);
 
+    void ordoneaza_temperatura();
+
     friend std::ostream &operator<<(std::ostream &os, const statistica &statistica);
     ~statistica();
 
     std::shared_ptr <fenomen_meteorologic> &operator[](int i) {
         return date[i];
     }
+
+    void ordoneaza_pa();
+    std::shared_ptr <fenomen_meteorologic> gaseste(const date::year_month_day &data_fen);
+
+    unsigned dim() { return date.size(); }
 };
 
 #endif //SOARE_PLUS_PLUS_STATISTICA_H

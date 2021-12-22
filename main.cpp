@@ -49,23 +49,42 @@ class baza {
 protected:
     int x;
 public:
-    virtual void f() {
-        std::cout << "baza\n";
-    }
+    virtual void f() = 0;
+    virtual ~baza() = default;
+
+    std::string getTip() const { return ""; }
 };
+
+void baza::f() {}
 
 class der1 : virtual public baza {
 public:
     void f() override {
+        g();
         baza::f();
         std::cout << "d1\n";
     }
+
+private:
+    void g() {}
 };
 class der2 : virtual public baza {
 public:
     void f() override {
+        h();
         baza::f();
         std::cout << "d2\n";
+    }
+
+private:
+    void h() {}
+};
+class der3 : public baza {
+    void hh() {}
+
+public:
+    void f() override {
+        hh();
     }
 };
 class der_multipla : public der1, public der2 {
@@ -82,7 +101,12 @@ class abc {
     int a;
     float b;
     double c;
+    baza *bz;
 public:
+    void f() {
+        bz->f();
+    }
+
     abc(int a = 2, float b = 1, double c = 0) : a(a), b(b), c(c) {}
 };
 
@@ -91,7 +115,25 @@ void f(T x, U y) {
     std::cout << x << " " << y << "\n";
 }
 
+template <typename T>
+class app {
+    T date;
+    app() = default;
+    static app *app_;
+public:
+    static app &instance() {
+        if(app_ == nullptr)
+            app_ = new app();
+        return *app_;
+    }
+};
+
+template <typename T>
+app <T> *app <T>::app_ = nullptr;
+
 int main() {
+    auto &apl = app <der3>::instance();
+    der3 d0;
     f <int, int>(2, 3);
     f <int, double>(2, 3);
     f <float, double>(2, 3);
@@ -134,6 +176,7 @@ int main() {
     catch(std::exception &eroare) {
         std::cout << eroare.what() << "\n";
         //throw;
+        //throw eroare;
     }
 
     std::cout << fenomen_meteorologic::getIdMax() << "\n";
@@ -155,6 +198,19 @@ int main() {
     stat.adauga(s1);
     stat.adauga(ceata_);
     stat.adauga(s2);
+
+    auto &elem = stat[1];
+    try {
+        auto &elem2 = dynamic_cast<ploaie &>(*elem);
+        elem2.ploua();
+        std::cout << "\nploaie ok\n";
+        auto &elem3 = dynamic_cast<furtuna &>(*elem);
+        elem3.tunet();
+    }
+    catch(std::bad_cast &err) {
+        std::cout << "err bad cast!!! " << err.what() << "\n";
+    }
+
     stat.adauga(std::make_shared <furtuna>(fr));
     {
         statistica stat2(stat);
@@ -165,5 +221,23 @@ int main() {
     simulator <unsigned> sim{std::set <std::shared_ptr <fenomen_meteorologic>>{p1, s1, ceata_, s2}};
     simulator <unsigned short> sim2{std::set <std::shared_ptr <fenomen_meteorologic>>{p1, s1, ceata_, s2}};
     sim.simuleaza();
+
+    std::cout << stat.dim();
+    std::cout << "----\?\?\?-----\n";
+    std::cout << stat;
+    stat.ordoneaza_temperatura();
+    std::cout << "---------\n";
+    std::cout << stat;
+    stat.ordoneaza_pa();
+    std::cout << "---------\n";
+    std::cout << stat;
+    try {
+        std::cout << *stat.gaseste(2020_y / 10 / 15);
+        std::cout << *stat.gaseste(2023_y / 10 / 15);
+        std::cout << *stat.gaseste(2020_y / 10 / 15);
+    }
+    catch(eroare_fenomen &err) {
+        std::cout << err.what() << "\n";
+    }
     return 0;
 }

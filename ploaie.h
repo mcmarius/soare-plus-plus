@@ -16,6 +16,7 @@ public:
 
     int temperaturaAparenta() const;
     std::shared_ptr <fenomen_meteorologic> clone() const override;
+    void ploua() {}
 };
 
 #endif //SOARE_PLUS_PLUS_PLOAIE_H

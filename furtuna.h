@@ -15,6 +15,7 @@ public:
     furtuna(const std::string &nume, const date::year_month_day &inceput, const date::year_month_day &sfarsit);
     std::shared_ptr <fenomen_meteorologic> clone() const override;
     ~furtuna() override;
+    void tunet() {}
 };
 
 #endif //SOARE_PLUS_PLUS_FURTUNA_H
